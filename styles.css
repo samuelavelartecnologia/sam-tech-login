@@ -1,0 +1,720 @@
+/* Variáveis para cores e estilos - Ajustadas para a identidade visual da Sam's Tech */
+:root {
+    --primary-light: #FF7A45; /* Laranja claro */
+    --primary-color: #E74D7B; /* Rosa/Vermelho do meio */
+    --primary-dark: #9C2AAD; /* Roxo escuro */
+    --secondary-color: #222222; /* Cinza escuro para textos */
+    --accent-color: #FF7A45; /* Cor de destaque - laranja */
+    --background-color: #121212; /* Fundo escuro */
+    --error-color: #ef4444;
+    --success-color: #10b981;
+    --border-color: #333333;
+    --text-color: #FFFFFF;
+    --text-light: #BBBBBB;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --transition: all 0.3s ease;
+    --border-radius: 8px;
+}
+
+/* Reset e estilos globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    /* Gradiente de fundo inspirado nas cores da Sam's Tech */
+    background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Elementos decorativos de fundo estilo Sam's Tech */
+body::before {
+    content: '';
+    position: absolute;
+    width: 40vw;
+    height: 40vw;
+    background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+    top: -20vw;
+    left: -20vw;
+    border-radius: 50%;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+body::after {
+    content: '';
+    position: absolute;
+    width: 30vw;
+    height: 30vw;
+    background: radial-gradient(circle, var(--primary-dark) 0%, transparent 70%);
+    bottom: -15vw;
+    right: -15vw;
+    border-radius: 50%;
+    opacity: 0.1;
+    z-index: -1;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Container principal de login */
+.login-container {
+    display: flex;
+    background-color: rgba(30, 30, 30, 0.95);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    min-height: 600px;
+    /* Adicionando borda sutil com a cor de destaque */
+    border: 1px solid rgba(255, 122, 69, 0.2);
+}
+
+/* Container do logo - Estilizado para destacar a logo da Sam's Tech */
+.logo-container {
+    flex: 0 0 45%;
+    background-color: #121212;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Adicionando a imagem de logo */
+.logo-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('Logo.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 2;
+}
+
+/* Aplicando gradiente que complementa a logo Sam's Tech */
+.logo-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 122, 69, 0.1) 0%, rgba(156, 42, 173, 0.2) 100%);
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Adicionando padrão decorativo inspirado na identidade visual Sam's Tech */
+.logo-container::after {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(231, 77, 123, 0.2) 0%, transparent 70%);
+    top: -150px;
+    right: -150px;
+    border-radius: 50%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.logo {
+    max-width: 80%;
+    max-height: 150px;
+    position: relative;
+    z-index: 2;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    /* Adicionando destaque à logo */
+    animation: logoGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+    from {
+        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+    }
+    to {
+        filter: drop-shadow(0 0 10px rgba(231, 77, 123, 0.7));
+    }
+}
+
+/* Estilo para o elemento decorativo da logo */
+.logo-accent-element {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    border: 15px solid rgba(231, 77, 123, 0.1);
+    border-radius: 50%;
+    bottom: -75px;
+    left: -75px;
+    z-index: 1;
+}
+
+/* Marca d'água da empresa no formulário */
+.brand-watermark {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    opacity: 0.05;
+    font-size: 120px;
+    color: var(--primary-color);
+    z-index: 0;
+    transform: rotate(-15deg);
+}
+
+/* Imagem do robô astronauta */
+.robot-img {
+    position: absolute;
+    top: 40%;
+    right: 40px;
+    width: 180px;
+    height: auto;
+    opacity: 0.3;
+    z-index: 1;
+    transform: translateY(-50%);
+    pointer-events: none;
+    animation: floating 5s ease-in-out infinite;
+}
+
+/* Animação de flutuação para o robô */
+@keyframes floating {
+    0% {
+        transform: translateY(-50%) translateX(0);
+    }
+    50% {
+        transform: translateY(-50%) translateX(-5px) rotate(1deg);
+    }
+    100% {
+        transform: translateY(-50%) translateX(0);
+    }
+}
+
+/* Container do formulário */
+.form-container {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* Adicionando fundo sutil que complementa a identidade visual */
+    background: linear-gradient(to bottom right, rgba(30, 30, 30, 0.95), rgba(40, 40, 40, 0.95));
+}
+
+h1 {
+    color: var(--text-color);
+    font-size: 2rem;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+/* Adicionando detalhe decorativo ao título */
+h1::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
+    border-radius: 4px;
+}
+
+.subtitle {
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+/* Estilos do formulário */
+.input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper i {
+    position: absolute;
+    left: 15px;
+    color: var(--primary-color);
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.toggle-password:hover {
+    color: var(--primary-light);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    color: var(--text-color);
+    background-color: rgba(20, 20, 20, 0.8);
+    transition: var(--transition);
+}
+
+input::placeholder {
+    color: rgba(187, 187, 187, 0.5);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(231, 77, 123, 0.3);
+}
+
+.error-message {
+    color: var(--error-color);
+    font-size: 14px;
+    margin-top: 5px;
+    display: none;
+}
+
+/* Opções de lembrar-me e esqueceu senha */
+.options-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input {
+    margin-right: 8px;
+    accent-color: var(--primary-color);
+}
+
+.forgot-password {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.forgot-password:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Mensagem de erro de login */
+.login-failed-message {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--error-color);
+    padding: 12px;
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    display: none;
+    align-items: center;
+}
+
+.login-failed-message i {
+    margin-right: 10px;
+}
+
+/* Botão de login estilizado para refletir a identidade visual da Sam's Tech */
+.btn-login {
+    background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
+    color: white;
+    border: none;
+    padding: 14px 20px;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeito de brilho no botão */
+.btn-login::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: rotate(45deg);
+    transition: all 0.7s ease;
+    opacity: 0;
+}
+
+.btn-login:hover::before {
+    opacity: 1;
+    transform: rotate(45deg) translate(100%, 100%);
+}
+
+.btn-login span {
+    margin-right: 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.btn-login i {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(231, 77, 123, 0.4);
+}
+
+.btn-login:active {
+    transform: translateY(0);
+}
+
+/* Link para registro */
+.register-link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.register-link a {
+    color: var(--primary-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.register-link a:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
+}
+
+/* Login com redes sociais */
+.social-login {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.social-login p {
+    color: var(--text-light);
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.social-login p::before,
+.social-login p::after {
+    content: "";
+    display: inline-block;
+    width: 30%;
+    height: 1px;
+    background-color: var(--border-color);
+    position: absolute;
+    top: 50%;
+}
+
+.social-login p::before {
+    left: 0;
+}
+
+.social-login p::after {
+    right: 0;
+}
+
+.social-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    background-color: rgba(20, 20, 20, 0.8);
+    transition: var(--transition);
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-btn::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 60%, rgba(231, 77, 123, 0.2) 100%);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.social-btn:hover::before {
+    opacity: 1;
+}
+
+.social-btn i {
+    font-size: 20px;
+    position: relative;
+    z-index: 2;
+}
+
+.social-btn.google i {
+    color: #DB4437;
+}
+
+.social-btn.facebook i {
+    color: #4267B2;
+}
+
+.social-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-color: var(--primary-color);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: rgba(30, 30, 30, 0.95);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+    box-shadow: var(--shadow);
+    /* Adicionando detalhe de design no modal que combina com a identidade visual */
+    border-top: 4px solid;
+    border-image: linear-gradient(to right, var(--primary-light), var(--primary-dark)) 1;
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-light);
+    transition: var(--transition);
+}
+
+.close-modal:hover {
+    color: var(--primary-light);
+}
+
+.modal h2 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+    position: relative;
+}
+
+.modal h2::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
+    border-radius: 4px;
+}
+
+.modal p {
+    margin-bottom: 20px;
+    color: var(--text-light);
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+    .login-container {
+        flex-direction: column;
+    }
+    
+    .logo-container {
+        flex: 0 0 200px;
+        padding: 0;
+    }
+    
+    .logo-image {
+        background-position: center;
+    }
+    
+    .robot-img {
+        width: 150px;
+        right: 20px;
+        opacity: 0.25;
+    }
+}
+
+@media (max-width: 600px) {
+    .form-container {
+        padding: 30px 20px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .options-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .social-login p::before,
+    .social-login p::after {
+        width: 25%;
+    }
+    
+    .robot-img {
+        width: 140px;
+        right: 10px;
+        opacity: 0.1;
+    }
+}
+
+/* Animações */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-container {
+    animation: fadeIn 0.5s ease;
+}
+
+/* Animações adicionais para aumentar a interatividade */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.btn-login:focus {
+    animation: pulse 1s infinite;
+}
+
+/* Melhorando a acessibilidade com foco visual */
+input:focus, 
+button:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Estilo para o estado de foco dos links */
+a:focus {
+    outline: 2px dashed var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .robot-img {
+        animation: none !important;
+    }
+}
+
+/* Estilos para o logotipo da Sam's Tech */
+.sams-tech-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+    font-weight: bold;
+    font-size: 4rem;
+    line-height: 0.9;
+}
+
+.brand-name {
+    background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    display: block;
+}
+
+.brand-name-tech {
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    display: block;
+} 

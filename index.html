@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sam's Tech</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <div class="login-container">
+            <div class="logo-container">
+                <div class="logo-image"></div>
+            </div>
+            
+            <div class="form-container">
+                <!-- Marca d'água do robô astronauta como imagem direta -->
+                <img src="robozinho-removebg-preview.png" class="robot-img" alt="" aria-hidden="true">
+                
+                <h1>Bem-vindo à Sam's Tech</h1>
+                <p class="subtitle">Faça login para acessar o sistema</p>
+                
+                <form id="login-form" action="#" method="POST">
+                    <div class="input-group">
+                        <label for="username">Usuário ou E-mail</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="username" name="username" placeholder="Digite seu usuário ou e-mail" required>
+                        </div>
+                        <span class="error-message" id="username-error"></span>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+                            <i class="fas fa-eye toggle-password" id="toggle-password"></i>
+                        </div>
+                        <span class="error-message" id="password-error"></span>
+                    </div>
+                    
+                    <div class="options-group">
+                        <div class="remember-me">
+                            <input type="checkbox" id="remember" name="remember">
+                            <label for="remember">Lembrar-me</label>
+                        </div>
+                        <a href="#" class="forgot-password" id="forgot-password">Esqueceu a senha?</a>
+                    </div>
+                    
+                    <div class="login-failed-message" id="login-failed">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>Credenciais inválidas. Verifique seu usuário e senha.</span>
+                    </div>
+                    
+                    <button type="submit" class="btn-login">
+                        <span>Entrar</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </form>
+                
+                <div class="register-link">
+                    <p>Não tem uma conta? <a href="#" id="register-link">Cadastre-se</a></p>
+                </div>
+                
+                <div class="social-login">
+                    <p>Ou faça login com</p>
+                    <div class="social-buttons">
+                        <button class="social-btn google">
+                            <i class="fab fa-google"></i>
+                        </button>
+                        <button class="social-btn facebook">
+                            <i class="fab fa-facebook-f"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="brand-watermark">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Recuperação de Senha -->
+    <div class="modal" id="password-recovery-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Recuperação de Senha</h2>
+            <p>Digite seu e-mail para receber instruções de recuperação de senha.</p>
+            <form id="recovery-form">
+                <div class="input-group">
+                    <label for="recovery-email">E-mail</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="recovery-email" name="recovery-email" placeholder="Digite seu e-mail" required>
+                    </div>
+                    <span class="error-message" id="recovery-email-error"></span>
+                </div>
+                <button type="submit" class="btn-login">Enviar</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal de Cadastro -->
+    <div class="modal" id="register-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Criar Nova Conta</h2>
+            <form id="register-form">
+                <div class="input-group">
+                    <label for="register-name">Nome da Empresa</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-building"></i>
+                        <input type="text" id="register-name" name="register-name" placeholder="Digite o nome da sua empresa" required>
+                    </div>
+                    <span class="error-message" id="register-name-error"></span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="register-email">E-mail</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="register-email" name="register-email" placeholder="Digite seu e-mail" required>
+                    </div>
+                    <span class="error-message" id="register-email-error"></span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="register-password">Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-password" name="register-password" placeholder="Digite sua senha" required>
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div>
+                    <span class="error-message" id="register-password-error"></span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="register-confirm-password">Confirmar Senha</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="register-confirm-password" name="register-confirm-password" placeholder="Confirme sua senha" required>
+                        <i class="fas fa-eye toggle-password"></i>
+                    </div>
+                    <span class="error-message" id="register-confirm-password-error"></span>
+                </div>
+                
+                <button type="submit" class="btn-login">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 

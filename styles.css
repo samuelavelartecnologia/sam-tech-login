@@ -6,6 +6,8 @@
     --secondary-color: #222222; /* Cinza escuro para textos */
     --accent-color: #FF7A45; /* Cor de destaque - laranja */
     --background-color: #121212; /* Fundo escuro */
+    --modal-background: #1a1a1a;
+    --input-background: #2a2a2a;
     --error-color: #ef4444;
     --success-color: #10b981;
     --border-color: #333333;
@@ -523,143 +525,152 @@ input:focus {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.85);
     z-index: 1000;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
 }
 
-.modal-content {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    width: 90%;
-    max-width: 500px;
-    animation: modalFadeIn 0.3s ease-out;
+.modal.active {
+    display: flex;
+    animation: modalFadeIn 0.3s ease;
 }
 
 @keyframes modalFadeIn {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: scale(0.95);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: scale(1);
     }
 }
 
-.modal h2, .modal h3 {
-    color: #333;
-    margin-bottom: 1rem;
-    font-weight: 600;
+.modal-content {
+    background: var(--modal-background);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    border: 1px solid rgba(231, 77, 123, 0.2);
+    box-shadow: 0 0 20px rgba(231, 77, 123, 0.1);
+}
+
+.modal h3 {
+    margin-bottom: 10px;
+    font-size: 1.4em;
+    color: var(--text-color);
+    background: linear-gradient(45deg, var(--primary-light), var(--primary-color));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .modal p {
-    color: #666;
-    margin-bottom: 1.5rem;
+    color: var(--text-light);
+    margin-bottom: 25px;
+    font-size: 0.95em;
+    line-height: 1.5;
+}
+
+.modal .input-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.modal input {
+    width: 100%;
+    padding: 15px 15px 15px 45px;
+    background: var(--input-background);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    font-size: 1em;
+    transition: all 0.3s ease;
+}
+
+.modal input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(231, 77, 123, 0.1);
+}
+
+.modal i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    font-size: 1.1em;
+}
+
+.modal .btn-login {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(45deg, var(--primary-light), var(--primary-color), var(--primary-dark));
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal .btn-login::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+    );
+    transition: 0.5s;
+}
+
+.modal .btn-login:hover::before {
+    left: 100%;
+}
+
+.modal .btn-login i {
+    position: static;
+    transform: none;
+    color: white;
+    transition: transform 0.3s ease;
+}
+
+.modal .btn-login:hover i {
+    transform: translateX(5px);
 }
 
 .close-modal {
     position: absolute;
-    right: 1rem;
-    top: 1rem;
-    font-size: 1.5rem;
+    right: 15px;
+    top: 15px;
+    font-size: 24px;
+    color: var(--text-light);
     cursor: pointer;
-    color: #999;
-    transition: color 0.3s;
+    transition: var(--transition);
+    z-index: 2;
 }
 
 .close-modal:hover {
-    color: #333;
-}
-
-#license-key-modal .form-group {
-    margin-bottom: 1.5rem;
-}
-
-#license-key-modal .input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-top: 0.5rem;
-}
-
-#license-key-modal .input-group i {
-    position: absolute;
-    left: 1rem;
-    color: #666;
-}
-
-#license-key-modal input {
-    width: 100%;
-    padding: 0.8rem 1rem 0.8rem 2.5rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-}
-
-#license-key-modal input:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-#license-key-modal .btn-login {
-    width: 100%;
-    margin-top: 1rem;
-    background: linear-gradient(45deg, #007bff, #0056b3);
-    color: white;
-    border: none;
-    padding: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-#license-key-modal .btn-login:hover {
-    transform: translateY(-1px);
-    background: linear-gradient(45deg, #0056b3, #004494);
-}
-
-#license-key-modal .btn-login:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-    transform: none;
-}
-
-#license-key-modal .error-message {
-    color: #dc3545;
-    font-size: 0.875rem;
-    margin-top: 0.5rem;
-    display: none;
-}
-
-/* Animação de loading */
-.fa-spinner {
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .modal-content {
-        width: 95%;
-        padding: 1.5rem;
-        margin: 1rem;
-    }
+    color: var(--primary-color);
 }
 
 /* Componente de status da licença */
@@ -792,6 +803,15 @@ input:focus {
 #license-key:focus {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 2px rgba(231, 77, 123, 0.2);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+        margin: 1rem;
+    }
 }
 
 /* Responsividade */

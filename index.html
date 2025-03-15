@@ -144,17 +144,17 @@
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h3>Insira sua Chave de Licença</h3>
-            <p>Para continuar, é necessário validar sua chave de licença.</p>
+            <p>Para continuar, é necessário validar sua chave de licença. Digite a chave que você recebeu por e-mail.</p>
             <form id="license-key-form">
-                <div class="form-group">
-                    <label for="license-key-input">Chave de Licença</label>
-                    <div class="input-group">
-                        <i class="fas fa-key"></i>
-                        <input type="text" id="license-key-input" name="license-key" placeholder="Digite sua chave de licença">
-                    </div>
-                    <div class="error-message" id="license-key-input-error"></div>
+                <div class="input-wrapper">
+                    <i class="fas fa-key"></i>
+                    <input type="text" id="license-key-input" name="license-key" placeholder="Digite sua chave de licença" autocomplete="off">
                 </div>
-                <button type="submit" class="btn-login">Validar Licença <i class="fas fa-arrow-right"></i></button>
+                <div class="error-message" id="license-key-input-error"></div>
+                <button type="submit" class="btn-login">
+                    <span>Validar Licença</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
             </form>
         </div>
     </div>

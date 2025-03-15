@@ -1,0 +1,71 @@
+# Plano de Desenvolvimento para o Sistema de Licenciamento
+
+## Fase 1: Adaptação da Interface de Login (Semana 1)
+
+### 1.1 Análise da Interface Atual
+- Dia 1: Avaliar o HTML, CSS e JavaScript existentes
+- Dia 1: Identificar elementos a serem modificados/adicionados
+
+### 1.2 Expansão da Interface
+- Dia 2-3: Adicionar formulário de cadastro (nome, empresa, email, telefone, senha)
+- Dia 3-4: Implementar tela de recuperação de senha
+- Dia 4-5: Criar componente para exibição de status da licença (tempo restante)
+
+### 1.3 Validações no Frontend
+- Dia 5-6: Implementar validações de formulários (formato de email, força da senha)
+- Dia 6-7: Adicionar feedback visual para o usuário (mensagens de erro/sucesso)
+
+## Fase 2: Configuração do Firebase (Semana 2)
+
+### 2.1 Configuração Inicial
+- Dia 1: Criar projeto no Firebase Console
+- Dia 1: Configurar Firestore Database com regras de segurança básicas
+- Dia 2: Integrar SDK do Firebase no frontend
+
+### 2.2 Implementação da Autenticação
+- Dia 2-3: Implementar cadastro de usuários com hashing de senha
+- Dia 3-4: Desenvolver sistema de login seguro
+- Dia 4-5: Criar funcionalidade de recuperação de senha via email
+
+### 2.3 Estrutura de Dados
+- Dia 5-6: Definir esquema para armazenamento de licenças
+- Dia 6-7: Implementar funções para verificação de validade de licenças
+- Dia 7: Testes de integração Firebase-Frontend
+
+## Fase 3: Sistema de Autorização do Bot (Semana 3)
+
+### 3.1 Sistema de Tokens
+- Dia 1-2: Desenvolver mecanismo de geração de tokens de autorização
+- Dia 2-3: Implementar verificação de tokens antes da execução do bot
+- Dia 3-4: Criar sistema de armazenamento seguro para tokens
+
+### 3.2 Integração com o Bot
+- Dia 4-5: Modificar inicialização do bot para verificar autorização
+- Dia 5-6: Adicionar lógica para impedir execução sem autenticação válida
+- Dia 6-7: Testes de integração do sistema completo
+
+## Fase 4: Gerador de Licenças em Python (Semana 4)
+
+### 4.1 Estrutura Básica
+- Dia 1-2: Configurar projeto Python com acesso ao Firebase
+- Dia 2-3: Implementar gerador de chaves de licença únicas
+- Dia 3-4: Desenvolver interface de linha de comando para o gerador
+
+### 4.2 Funcionalidades Avançadas
+- Dia 4-5: Adicionar controle de duração da licença (horas, dias, meses, anos)
+- Dia 5-6: Implementar sistema de revogação de licenças
+- Dia 6-7: Criar relatórios de licenças ativas/revogadas/expiradas
+
+## Fase 5: Testes e Ajustes Finais (Semana 5)
+
+### 5.1 Testes Integrados
+- Dia 1-3: Testar o fluxo completo (cadastro → login → verificação → execução do bot)
+- Dia 3-4: Testes de segurança (tentativas de bypass, acesso sem autorização)
+
+### 5.2 Refinamentos
+- Dia 4-5: Melhorias na interface baseadas nos testes
+- Dia 5-6: Otimização de performance e segurança
+- Dia 6-7: Documentação do sistema completo
+
+### 5.3 Lançamento
+- Dia 7: Preparação para deploy da versão final

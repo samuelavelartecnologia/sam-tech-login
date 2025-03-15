@@ -104,6 +104,50 @@
         </div>
     </div>
     
+    <!-- Modal de Status da Licença -->
+    <div class="modal" id="license-status-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="licence-box">
+                <div class="licence-header">
+                    <h3>Status da Licença</h3>
+                    <div class="status-badge active" id="license-status-badge">Ativa</div>
+                </div>
+                <div class="licence-info">
+                    <p id="license-company">Empresa: <span>Sam Tech Solutions</span></p>
+                    <p>Chave: <span id="license-key-display">••••••••••1234</span></p>
+                    <p>Expira em: <span id="license-expiry">01/01/2024</span></p>
+                </div>
+                <div class="licence-progress-bar">
+                    <div class="licence-progress-track">
+                        <div class="licence-progress" id="license-progress"></div>
+                    </div>
+                    <p class="licence-days-remaining" id="license-days-remaining">30 dias restantes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para Inserção da Chave de Licença -->
+    <div class="modal" id="license-key-modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Insira sua Chave de Licença</h3>
+            <p>Para continuar, é necessário validar sua chave de licença.</p>
+            <form id="license-key-form">
+                <div class="form-group">
+                    <label for="license-key-input">Chave de Licença</label>
+                    <div class="input-group">
+                        <i class="fas fa-key"></i>
+                        <input type="text" id="license-key-input" name="license-key" placeholder="Digite sua chave de licença">
+                    </div>
+                    <div class="error-message" id="license-key-input-error"></div>
+                </div>
+                <button type="submit" class="btn-login">Validar Licença <i class="fas fa-arrow-right"></i></button>
+            </form>
+        </div>
+    </div>
+    
     <!-- Modal de Cadastro -->
     <div class="modal" id="register-modal">
         <div class="modal-content">
@@ -117,6 +161,15 @@
                         <input type="text" id="register-name" name="register-name" placeholder="Digite o nome da sua empresa" required>
                     </div>
                     <span class="error-message" id="register-name-error"></span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="register-phone">Telefone</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-phone"></i>
+                        <input type="text" id="register-phone" name="register-phone" placeholder="Digite seu telefone" required>
+                    </div>
+                    <span class="error-message" id="register-phone-error"></span>
                 </div>
                 
                 <div class="input-group">
@@ -155,4 +208,4 @@
     
     <script src="script.js"></script>
 </body>
-</html> 
+</html>

@@ -519,7 +519,7 @@ input:focus {
 .modal {
     display: none;
     position: fixed;
-    z-index: 100;
+    z-index: 1000;
     left: 0;
     top: 0;
     width: 100%;
@@ -527,6 +527,13 @@ input:focus {
     background-color: rgba(0, 0, 0, 0.7);
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal.show {
+    display: flex;
+    opacity: 1;
 }
 
 .modal-content {
@@ -576,6 +583,138 @@ input:focus {
 .modal p {
     margin-bottom: 20px;
     color: var(--text-light);
+}
+
+/* Estilos para o componente de status da licença */
+.license-info {
+    background-color: rgba(40, 40, 40, 0.95);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.license-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary-dark) 100%);
+}
+
+.license-icon {
+    font-size: 2.5rem;
+    color: white;
+    margin-right: 15px;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+.license-title h3 {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.license-title p {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    color: white;
+}
+
+.status-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-left: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-badge.active {
+    background-color: #10b981;
+    color: white;
+}
+
+.status-badge.expired {
+    background-color: #ef4444;
+    color: white;
+}
+
+.status-badge.warning {
+    background-color: #f59e0b;
+    color: white;
+}
+
+.license-details {
+    padding: 20px;
+}
+
+.license-item {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.license-item:last-child {
+    margin-bottom: 0;
+}
+
+.license-item i {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-right: 15px;
+    margin-top: 3px;
+}
+
+.license-text {
+    flex: 1;
+}
+
+.license-text span {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-light);
+    margin-bottom: 5px;
+}
+
+.license-text p {
+    margin: 0;
+    font-size: 1rem;
+    color: var(--text-color);
+}
+
+.time-remaining {
+    margin-top: 5px;
+}
+
+.progress-bar {
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary-color) 100%);
+    width: 75%; /* Valor será ajustado dinamicamente via JavaScript */
+    transition: width 0.5s ease;
+}
+
+#license-days-remaining {
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+/* Ajuste para que o campo de licença fique em destaque */
+#license-key {
+    border: 1px solid rgba(231, 77, 123, 0.3);
+}
+
+#license-key:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(231, 77, 123, 0.2);
 }
 
 /* Responsividade */
@@ -701,20 +840,64 @@ a:focus {
     line-height: 0.9;
 }
 
-.brand-name {
-    background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary-color) 100%);
+.brand-name-sam {
+    background: linear-gradient(90deg, var(--accent-color) 0%, var(--primary-color) 100%);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
     display: block;
 }
 
 .brand-name-tech {
     background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    display: block;
+}
+
+/* Título com gradiente */
+.gradient-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    background: linear-gradient(90deg, var(--primary-light), var(--primary-dark));
+    -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 10px;
+}
+
+/* Subtítulo com gradiente */
+.gradient-subtitle {
+    font-size: 1.2rem;
+    font-weight: 500;
+    background: linear-gradient(90deg, var(--primary-light), var(--primary-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    opacity: 0.8;
+    margin-bottom: 30px;
+}
+
+.licence-box .licence-header h3 {
+    background: -webkit-linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
     display: block;
-} 
+}
+
+.licence-progress-bar .licence-days-remaining {
+    color: #fff;
+    background: -webkit-linear-gradient(45deg, var(--primary-color), var(--accent-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: block;
+}

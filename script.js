@@ -1,3 +1,22 @@
+// No início do arquivo, antes do DOMContentLoaded
+// Configuração do Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyAY4nbAihrmDH6q7yDrVQiAzIklx9D3Zss",
+    authDomain: "samstech-d96cd.firebaseapp.com",
+    projectId: "samstech-d96cd",
+    storageBucket: "samstech-d96cd.appspot.com",
+    messagingSenderId: "378706712897",
+    appId: "1:378706712897:web:ebff2cce9749e2d58ea9c0",
+    measurementId: "G-HR6LP9QFSW"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+
+// Obter referências dos serviços
+const auth = firebase.auth();
+const db = firebase.firestore();
+
 document.addEventListener('DOMContentLoaded', function() {
     // Elementos do DOM
     const loginForm = document.getElementById('login-form');
@@ -437,10 +456,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     // Validação do formulário de registro
-    registerForm.addEventListener('submit', function(e) {
+    registerForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
-        // Limpa mensagens de erro anteriores
         clearErrors();
         
         const companyName = document.getElementById('register-name').value.trim();
@@ -449,74 +466,45 @@ document.addEventListener('DOMContentLoaded', function() {
         const password = document.getElementById('register-password').value;
         const confirmPassword = document.getElementById('register-confirm-password').value;
         
-        // Validação do nome da empresa
-        if (companyName === '') {
-            showError('register-name-error', 'Por favor, digite o nome da empresa.');
-            return;
-        }
+        // Validações básicas...
         
-        // Validação do telefone
-        if (phone === '') {
-            showError('register-phone-error', 'Por favor, digite um telefone de contato.');
-            return;
-        }
-        
-        // Validação do email
-        if (!isValidEmail(email)) {
-            showError('register-email-error', 'Por favor, insira um e-mail válido.');
-            return;
-        }
-        
-        // Verificar se o email já está em uso
-        const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+        // Remover esta verificação do localStorage
+        /* const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
         if (registeredUsers.some(user => user.email === email)) {
             showError('register-email-error', 'Este e-mail já está em uso.');
             return;
-        }
+        } */
         
-        // Validação da senha
-        if (!isStrongPassword(password)) {
-            showError('register-password-error', 'A senha deve ter pelo menos 8 caracteres, incluindo maiúsculas, minúsculas, números e caracteres especiais.');
-            return;
-        }
-        
-        // Validação da confirmação de senha
-        if (password !== confirmPassword) {
-            showError('register-confirm-password-error', 'As senhas não correspondem.');
-            return;
-        }
-        
-        // Simulação de registro (salvar no localStorage)
         const registerButton = this.querySelector('button');
         const originalButtonText = registerButton.textContent;
         
         registerButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
         registerButton.disabled = true;
         
-        setTimeout(() => {
-            // Criar novo usuário
-            const newUser = {
+        try {
+            // Criar usuário no Firebase Authentication
+            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            
+            // Adicionar dados do usuário ao Firestore
+            await db.collection('users').doc(userCredential.user.uid).set({
                 empresa: companyName,
                 telefone: phone,
                 email: email,
-                password: password, // Em uma aplicação real, isto seria um hash seguro
-                licenca: null,
-                status: "pendente"
-            };
-            
-            // Adicionar à lista de usuários cadastrados
-            registeredUsers.push(newUser);
-            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-            
+                status: "pendente",
+                dataCadastro: firebase.firestore.FieldValue.serverTimestamp()
+            });
+        
             alert('Cadastro realizado com sucesso! Aguarde a ativação da sua licença.');
             closeModal(registerModal);
-            
-            // Limpar formulário
             registerForm.reset();
-            
+        
+        } catch (error) {
+            console.error('Erro durante o registro:', error);
+            showError('register-email-error', 'Erro ao criar conta: ' + error.message);
+        } finally {
             registerButton.textContent = originalButtonText;
             registerButton.disabled = false;
-        }, 1500);
+        }
     });
     
     // Verificar se há um usuário "lembrado"

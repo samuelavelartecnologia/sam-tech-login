@@ -146,7 +146,16 @@ const licenseManager = {
                 };
             }
             
-            // Verificar se a licença já está atribuída a outro usuário
+            // Se for licença de desenvolvedor, permitir uso em qualquer conta
+            if (licenseData.tipo === 'desenvolvedor') {
+                console.log("Licença de desenvolvedor validada");
+                return { 
+                    success: true, 
+                    licenseData: licenseData 
+                };
+            }
+            
+            // Para outros tipos de licença, verificar se já está em uso
             if (licenseData.usuarioId && licenseData.usuarioId !== userId) {
                 console.log("Licença já em uso por outro usuário");
                 return { 
@@ -186,10 +195,10 @@ const licenseManager = {
             }
             
             // Registrar uso da licença
-            await addDoc(collection(licensesCollection, doc(licensesCollection, licenseDoc.id).collection('acessos')), {
+            await addDoc(collection(db, `licencas/${licenseDoc.id}/acessos`), {
                 usuarioId: userId,
                 timestamp: serverTimestamp(),
-                ip: 'não registrado' // Em produção, capturar IP real
+                ip: 'não registrado'
             });
             
             console.log("Licença validada com sucesso");
@@ -199,7 +208,10 @@ const licenseManager = {
             };
         } catch (error) {
             console.error("Erro ao verificar licença:", error);
-            return { success: false, error: error.message };
+            return { 
+                success: false, 
+                error: 'Erro ao validar licença: ' + error.message 
+            };
         }
     },
     

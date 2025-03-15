@@ -519,73 +519,150 @@ input:focus {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
-    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.modal.show {
-    display: flex;
-    opacity: 1;
+    align-items: center;
 }
 
 .modal-content {
-    background-color: rgba(30, 30, 30, 0.95);
-    border-radius: var(--border-radius);
-    padding: 30px;
-    max-width: 500px;
-    width: 90%;
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     position: relative;
-    box-shadow: var(--shadow);
-    /* Adicionando detalhe de design no modal que combina com a identidade visual */
-    border-top: 4px solid;
-    border-image: linear-gradient(to right, var(--primary-light), var(--primary-dark)) 1;
+    width: 90%;
+    max-width: 500px;
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal h2, .modal h3 {
+    color: #333;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.modal p {
+    color: #666;
+    margin-bottom: 1.5rem;
 }
 
 .close-modal {
     position: absolute;
-    right: 20px;
-    top: 15px;
-    font-size: 24px;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
     cursor: pointer;
-    color: var(--text-light);
-    transition: var(--transition);
+    color: #999;
+    transition: color 0.3s;
 }
 
 .close-modal:hover {
-    color: var(--primary-light);
+    color: #333;
 }
 
-.modal h2 {
-    margin-bottom: 15px;
-    color: var(--text-color);
+#license-key-modal .form-group {
+    margin-bottom: 1.5rem;
+}
+
+#license-key-modal .input-group {
     position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
 }
 
-.modal h2::after {
-    content: '';
+#license-key-modal .input-group i {
     position: absolute;
-    left: 0;
-    bottom: -8px;
-    width: 40px;
-    height: 3px;
-    background: linear-gradient(to right, var(--primary-light), var(--primary-dark));
-    border-radius: 4px;
+    left: 1rem;
+    color: #666;
 }
 
-.modal p {
-    margin-bottom: 20px;
-    color: var(--text-light);
+#license-key-modal input {
+    width: 100%;
+    padding: 0.8rem 1rem 0.8rem 2.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
 }
 
-/* Estilos para o componente de status da licença */
+#license-key-modal input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+#license-key-modal .btn-login {
+    width: 100%;
+    margin-top: 1rem;
+    background: linear-gradient(45deg, #007bff, #0056b3);
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+#license-key-modal .btn-login:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(45deg, #0056b3, #004494);
+}
+
+#license-key-modal .btn-login:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+}
+
+#license-key-modal .error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    display: none;
+}
+
+/* Animação de loading */
+.fa-spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+}
+
+/* Componente de status da licença */
 .license-info {
     background-color: rgba(40, 40, 40, 0.95);
     border-radius: var(--border-radius);

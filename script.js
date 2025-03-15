@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const loginForm = document.getElementById('login-form');
     const registerForm = document.getElementById('register-form');
     const licenseKeyForm = document.getElementById('license-key-form');
+    const licenseKeyModal = document.getElementById('license-key-modal');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('toggle-password');
@@ -14,8 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerLink = document.getElementById('register-link');
     const passwordRecoveryModal = document.getElementById('password-recovery-modal');
     const registerModal = document.getElementById('register-modal');
-    const licenseKeyModal = document.getElementById('license-key-modal');
-    const licenseStatusModal = document.getElementById('license-status-modal');
     const recoveryForm = document.getElementById('recovery-form');
     const closeModalButtons = document.querySelectorAll('.close-modal');
     const togglePasswordButtons = document.querySelectorAll('.toggle-password');
@@ -75,8 +74,18 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.currentUser = result.user;
                 window.userData = result.userData;
                 
-                // Abre modal para inserção da chave de licença
-                openModal(licenseKeyModal);
+                // Verifica se já tem licença ativa
+                const licenseResult = await licenseManager.obterLicencaUsuario(result.user.uid);
+                
+                if (licenseResult.success && licenseResult.licenseData.status === 'ativa') {
+                    // Já tem licença ativa, redireciona
+                    window.location.href = 'dashboard.html';
+                } else {
+                    // Não tem licença, mostra modal
+                    setTimeout(() => {
+                        openModal(licenseKeyModal);
+                    }, 500); // Pequeno delay para melhor UX
+                }
             } else {
                 showError('username-error', result.error);
             }
@@ -101,7 +110,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (result.success) {
                 alert('Licença validada com sucesso!');
-                // Aqui você pode redirecionar para a página principal ou fazer outras ações necessárias
                 window.location.href = 'dashboard.html'; // ou outra página
             } else {
                 showError('license-key-input-error', result.error);

@@ -5,9 +5,6 @@ import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, query, where,
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-analytics.js";
 
 // Your web app's Firebase configuration
-// Remova type="module" do script no HTML e use:
-// Removendo imports e usando CDN
-// Configuração do Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyAY4nbAihrmDH6q7yDrVQiAzIklx9D3Zss",
     authDomain: "samstech-d96cd.firebaseapp.com",
@@ -18,73 +15,34 @@ const firebaseConfig = {
     measurementId: "G-HR6LP9QFSW"
 };
 
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Obter instâncias dos serviços
-const auth = firebase.auth();
-const db = firebase.firestore();
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
 
 // Coleções do Firestore
-const usersCollection = db.collection('usuarios');
-const licensesCollection = db.collection('licencas');
+const usersCollection = collection(db, 'usuarios');
+const licensesCollection = collection(db, 'licencas');
 
 // Objeto para gerenciar autenticação
 const firebaseAuth = {
     // Criar novo usuário
     registrarUsuario: async (email, password, userData) => {
         try {
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            const user = userCredential.user;
-            
-            await db.collection('usuarios').doc(user.uid).set({
-                email: email,
-                empresa: userData.empresa,
-                telefone: userData.telefone,
-                dataCriacao: firebase.firestore.FieldValue.serverTimestamp(),
-                ultimoLogin: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            
-            return { success: true, userId: user.uid };
-        } catch (error) {
-            console.error("Erro ao registrar usuário:", error);
-            return { success: false, error: error.message };
-        }
-    }
-};
-
-// Tornar objetos disponíveis globalmente
-window.firebaseAuth = firebaseAuth;
-window.db = db;
-window.auth = auth;
-
-// Obtendo instâncias dos serviços
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-// Coleções do Firestore
-const usersCollection = db.collection('usuarios');
-const licensesCollection = db.collection('licencas');
-
-// Objeto de autenticação
-const firebaseAuth = {
-    // Criar um novo usuário
-    registrarUsuario: async (email, password, userData) => {
-        try {
             console.log(`Tentando registrar usuário: ${email}`);
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-            console.log("Usuário criado no Auth:", user.uid);
             
             await setDoc(doc(db, 'usuarios', user.uid), {
                 email: email,
                 empresa: userData.empresa,
                 telefone: userData.telefone,
                 dataCriacao: serverTimestamp(),
-                ultimoLogin: serverTimestamp()
+                ultimoLogin: serverTimestamp(),
+                status: "pendente"
             });
-            console.log("Dados do usuário salvos no Firestore");
             
+            console.log("Dados do usuário salvos na coleção 'usuarios'");
             return { success: true, userId: user.uid };
         } catch (error) {
             console.error("Erro ao registrar usuário:", error);
@@ -158,12 +116,15 @@ const licenseManager = {
     verificarLicenca: async (licenseKey, userId) => {
         try {
             console.log(`Verificando licença: ${licenseKey} para usuário: ${userId}`);
-            // Buscar licença pelo código
-            const licenseQuery = await query(licensesCollection, where('chave', '==', licenseKey))
-                .limit(1)
-                .get();
+            const licenseQuery = query(
+                licensesCollection,
+                where('chave', '==', licenseKey),
+                limit(1)
+            );
             
-            if (licenseQuery.empty) {
+            const querySnapshot = await getDocs(licenseQuery);
+            
+            if (querySnapshot.empty) {
                 console.log("Licença não encontrada");
                 return { 
                     success: false, 
@@ -171,7 +132,7 @@ const licenseManager = {
                 };
             }
             
-            const licenseDoc = licenseQuery.docs[0];
+            const licenseDoc = querySnapshot.docs[0];
             const licenseData = licenseDoc.data();
             console.log("Licença encontrada:", licenseData);
             
@@ -246,11 +207,13 @@ const licenseManager = {
     obterLicencaUsuario: async (userId) => {
         try {
             console.log(`Buscando licença para usuário: ${userId}`);
-            const licenseQuery = await query(licensesCollection, where('usuarioId', '==', userId))
+            const licenseQuery = query(licensesCollection, where('usuarioId', '==', userId))
                 .limit(1)
                 .get();
             
-            if (licenseQuery.empty) {
+            const querySnapshot = await getDocs(licenseQuery);
+            
+            if (querySnapshot.empty) {
                 console.log("Nenhuma licença encontrada para este usuário");
                 return { 
                     success: false, 
@@ -258,7 +221,7 @@ const licenseManager = {
                 };
             }
             
-            const licenseDoc = licenseQuery.docs[0];
+            const licenseDoc = querySnapshot.docs[0];
             const licenseData = licenseDoc.data();
             console.log("Licença encontrada:", licenseData);
             

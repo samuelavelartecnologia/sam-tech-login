@@ -1,25 +1,11 @@
-// No início do arquivo, antes do DOMContentLoaded
-// Configuração do Firebase
-const firebaseConfig = {
-    apiKey: "AIzaSyAY4nbAihrmDH6q7yDrVQiAzIklx9D3Zss",
-    authDomain: "samstech-d96cd.firebaseapp.com",
-    projectId: "samstech-d96cd",
-    storageBucket: "samstech-d96cd.appspot.com",
-    messagingSenderId: "378706712897",
-    appId: "1:378706712897:web:ebff2cce9749e2d58ea9c0",
-    measurementId: "G-HR6LP9QFSW"
-};
-
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-
-// Obter referências dos serviços
-const auth = firebase.auth();
-const db = firebase.firestore();
+// Importar módulos do Firebase
+import { firebaseAuth, licenseManager } from './firebase-config.js';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Elementos do DOM
     const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const licenseKeyForm = document.getElementById('license-key-form');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const togglePassword = document.getElementById('toggle-password');
@@ -31,8 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const licenseKeyModal = document.getElementById('license-key-modal');
     const licenseStatusModal = document.getElementById('license-status-modal');
     const recoveryForm = document.getElementById('recovery-form');
-    const registerForm = document.getElementById('register-form');
-    const licenseKeyForm = document.getElementById('license-key-form');
     const closeModalButtons = document.querySelectorAll('.close-modal');
     const togglePasswordButtons = document.querySelectorAll('.toggle-password');
     
@@ -53,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let lockoutTime = null;
     
     // Validação de formulário de login
-    loginForm.addEventListener('submit', function(e) {
+    loginForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         // Limpa mensagens de erro anteriores
@@ -83,70 +67,26 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Simulação de autenticação
-        // Em um ambiente real, isso seria substituído por uma chamada API
-        authenticateUser(username, password);
-    });
-    
-    // Autenticação do usuário (primeira etapa)
-    function authenticateUser(username, password) {
-        // Simulando um delay de rede
-        const loginButton = document.querySelector('.btn-login');
-        const originalButtonText = loginButton.innerHTML;
-        
-        loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Entrando...';
-        loginButton.disabled = true;
-        
-        setTimeout(() => {
-            // Verificando credenciais registradas no localStorage
-            let isAuthenticated = false;
-            let userData = null;
+        try {
+            const result = await firebaseAuth.loginUsuario(username, password);
             
-            // Verificar usuário e senha padrão para testes
-            if ((username === 'admin@exemplo.com' && password === 'senha123') || 
-                (username === 'samuelavelarbr@gmail.com' && password === '1234')) {
-                isAuthenticated = true;
-                userData = {
-                    empresa: username === 'samuelavelarbr@gmail.com' ? 'Sam Tech' : 'Sam Tech Demo',
-                    email: username
-                };
-            } else {
-                // Buscar usuários cadastrados
-                const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+            if (result.success) {
+                // Armazena dados do usuário temporariamente
+                window.currentUser = result.user;
+                window.userData = result.userData;
                 
-                // Procurar o usuário pelo email
-                const userFound = registeredUsers.find(user => user.email === username);
-                
-                // Verificar se o usuário existe e se a senha corresponde
-                if (userFound && userFound.password === password) {
-                    isAuthenticated = true;
-                    userData = userFound;
-                }
-            }
-            
-            if (isAuthenticated) {
-                // Login bem-sucedido, agora pede a licença
-                tempCredentials = userData; // Armazena as credenciais para uso posterior
-                
-                loginButton.innerHTML = originalButtonText;
-                loginButton.disabled = false;
-                
-                // Primeiro mostra mensagem de login bem-sucedido
-                alert('Login realizado com sucesso! Agora insira sua chave de licença.');
-                
-                // Abre o modal para inserção da chave de licença
+                // Abre modal para inserção da chave de licença
                 openModal(licenseKeyModal);
             } else {
-                // Login falhou
-                loginFailed();
-                loginButton.innerHTML = originalButtonText;
-                loginButton.disabled = false;
+                showError('username-error', result.error);
             }
-        }, 1500);
-    }
+        } catch (error) {
+            showError('username-error', 'Erro ao fazer login: ' + error.message);
+        }
+    });
     
     // Validação da chave de licença (segunda etapa)
-    licenseKeyForm.addEventListener('submit', function(e) {
+    licenseKeyForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
         const licenseKey = document.getElementById('license-key-input').value.trim();
@@ -156,103 +96,54 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Simula verificação da licença
-        validateLicense(licenseKey);
+        try {
+            const result = await licenseManager.verificarLicenca(licenseKey, window.currentUser.uid);
+            
+            if (result.success) {
+                alert('Licença validada com sucesso!');
+                // Aqui você pode redirecionar para a página principal ou fazer outras ações necessárias
+                window.location.href = 'dashboard.html'; // ou outra página
+            } else {
+                showError('license-key-input-error', result.error);
+            }
+        } catch (error) {
+            showError('license-key-input-error', 'Erro ao validar licença: ' + error.message);
+        }
     });
     
-    // Validação da licença
-    function validateLicense(licenseKey) {
-        // Simulando um delay de rede
-        const validateButton = licenseKeyForm.querySelector('button');
-        const originalButtonText = validateButton.innerHTML;
+    // Registro de novo usuário
+    registerForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
         
-        validateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validando...';
-        validateButton.disabled = true;
+        const empresa = document.getElementById('register-name').value;
+        const telefone = document.getElementById('register-phone').value;
+        const email = document.getElementById('register-email').value;
+        const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('register-confirm-password').value;
         
-        setTimeout(() => {
-            let licenseValid = false;
-            let licenseData = null;
-            
-            // Verifica se é a licença de demonstração
-            if (tempCredentials.email === 'admin@exemplo.com' && licenseKey === 'DEMO-1234-5678-9ABC') {
-                licenseValid = true;
-                licenseData = {
-                    chave: 'DEMO-1234-5678-9ABC',
-                    expira: new Date().getTime() + (30 * 24 * 60 * 60 * 1000), // 30 dias
-                    status: 'ativa'
-                };
-            } 
-            // Verifica se é a licença do usuário Samuel
-            else if (tempCredentials.email === 'samuelavelarbr@gmail.com' && licenseKey === 'desenvolvedor') {
-                licenseValid = true;
-                licenseData = {
-                    chave: 'desenvolvedor',
-                    expira: new Date().getTime() + (365 * 24 * 60 * 60 * 1000), // 1 ano
-                    status: 'ativa'
-                };
-            }
-            else {
-                // Verificar licença real
-                // Aqui seria uma chamada a API ou verificação no banco de dados
-                
-                // Simulando uma licença válida para teste
-                if (licenseKey.match(/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/)) {
-                    licenseValid = true;
-                    licenseData = {
-                        chave: licenseKey,
-                        expira: new Date().getTime() + (15 * 24 * 60 * 60 * 1000), // 15 dias
-                        status: 'ativa'
-                    };
-                }
-            }
-            
-            if (licenseValid) {
-                // Atualiza os dados do usuário com as informações da licença
-                const userData = tempCredentials;
-                userData.licenca = licenseData;
-                
-                // Login completo bem-sucedido
-                loginSuccessful(userData);
-                closeModal(licenseKeyModal);
-            } else {
-                showError('license-key-input-error', 'Chave de licença inválida. Verifique e tente novamente.');
-                validateButton.innerHTML = originalButtonText;
-                validateButton.disabled = false;
-            }
-        }, 1500);
-    }
-    
-    // Ação de login bem-sucedido
-    function loginSuccessful(userData) {
-        // Reseta contagem de tentativas
-        loginAttempts = 0;
-        
-        // Salvar no localStorage se "lembrar-me" estiver marcado
-        const rememberMe = document.getElementById('remember').checked;
-        if (rememberMe) {
-            localStorage.setItem('rememberedUser', usernameInput.value);
-        } else {
-            localStorage.removeItem('rememberedUser');
+        // Validações básicas
+        if (password !== confirmPassword) {
+            showError('register-password-error', 'As senhas não coincidem');
+            return;
         }
         
-        // Salvar token de autorização
-        const authToken = generateAuthToken();
-        localStorage.setItem('authToken', authToken);
-        
-        // Armazenar informações da licença na sessão
-        sessionStorage.setItem('currentUser', JSON.stringify(userData));
-        
-        // Exibir informações da licença
-        updateLicenseInfo(userData);
-        openModal(licenseStatusModal);
-        
-        // Configurar temporizador para exibir o dashboard após mostrar o status da licença
-        setTimeout(() => {
-            alert('Redirecionando para o dashboard...');
-            // Em um caso real:
-            // window.location.href = 'dashboard.html';
-        }, 5000);
-    }
+        try {
+            const result = await firebaseAuth.registrarUsuario(email, password, {
+                empresa: empresa,
+                telefone: telefone
+            });
+            
+            if (result.success) {
+                alert('Cadastro realizado com sucesso! Por favor, faça login.');
+                closeModal(registerModal);
+                clearForm(registerForm);
+            } else {
+                showError('register-email-error', result.error);
+            }
+        } catch (error) {
+            showError('register-email-error', 'Erro ao criar conta: ' + error.message);
+        }
+    });
     
     // Ação de login falhou
     function loginFailed() {
@@ -455,57 +346,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 1500);
     });
     
-    // Validação do formulário de registro
-    registerForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        clearErrors();
-        
-        const companyName = document.getElementById('register-name').value.trim();
-        const phone = document.getElementById('register-phone').value.trim();
-        const email = document.getElementById('register-email').value.trim();
-        const password = document.getElementById('register-password').value;
-        const confirmPassword = document.getElementById('register-confirm-password').value;
-        
-        // Validações básicas...
-        
-        // Remover esta verificação do localStorage
-        /* const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-        if (registeredUsers.some(user => user.email === email)) {
-            showError('register-email-error', 'Este e-mail já está em uso.');
-            return;
-        } */
-        
-        const registerButton = this.querySelector('button');
-        const originalButtonText = registerButton.textContent;
-        
-        registerButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cadastrando...';
-        registerButton.disabled = true;
-        
-        try {
-            // Criar usuário no Firebase Authentication
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-            
-            // Adicionar dados do usuário ao Firestore
-            await db.collection('users').doc(userCredential.user.uid).set({
-                empresa: companyName,
-                telefone: phone,
-                email: email,
-                status: "pendente",
-                dataCadastro: firebase.firestore.FieldValue.serverTimestamp()
-            });
-        
-            alert('Cadastro realizado com sucesso! Aguarde a ativação da sua licença.');
-            closeModal(registerModal);
-            registerForm.reset();
-        
-        } catch (error) {
-            console.error('Erro durante o registro:', error);
-            showError('register-email-error', 'Erro ao criar conta: ' + error.message);
-        } finally {
-            registerButton.textContent = originalButtonText;
-            registerButton.disabled = false;
+    // Funções auxiliares
+    function clearForm(form) {
+        form.reset();
+        const errorMessages = form.getElementsByClassName('error-message');
+        for (let error of errorMessages) {
+            error.textContent = '';
+            error.style.display = 'none';
         }
-    });
+    }
     
     // Verificar se há um usuário "lembrado"
     function checkRememberedUser() {

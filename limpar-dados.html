@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Dados - Sam's Tech</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: rgba(26, 26, 26, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .admin-title {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .admin-subtitle {
+            color: #888;
+            font-size: 16px;
+        }
+
+        .action-card {
+            background: rgba(20, 20, 20, 0.95);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .action-title {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .action-title i {
+            margin-right: 10px;
+            color: #ff6b6b;
+        }
+
+        .action-description {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .action-button {
+            background: linear-gradient(90deg, #ff6b6b 0%, #e066ff 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(224, 102, 255, 0.2);
+        }
+
+        .action-button:disabled {
+            background: #333;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .result-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .result-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .confirmation-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .confirmation-content {
+            background: #1a1a1a;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .confirmation-title {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .confirmation-message {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .confirm-button {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .cancel-button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">Gerenciamento de Dados</h1>
+            <p class="admin-subtitle">Ferramentas administrativas para o sistema Sam's Tech</p>
+        </div>
+
+        <!-- Limpar Dados de Licença -->
+        <div class="action-card">
+            <h2 class="action-title">
+                <i class="fas fa-eraser"></i>
+                Limpar Dados de Licença
+            </h2>
+            <p class="action-description">
+                Remove todos os dados de licença armazenados localmente neste dispositivo. 
+                Útil para resolver problemas de validação ou conflitos de licença.
+            </p>
+            <button id="clear-license-btn" class="action-button">
+                Limpar Dados de Licença
+            </button>
+            <div id="clear-license-result" class="result-message"></div>
+        </div>
+
+        <!-- Limpar Cache do Navegador -->
+        <div class="action-card">
+            <h2 class="action-title">
+                <i class="fas fa-broom"></i>
+                Limpar Cache do Navegador
+            </h2>
+            <p class="action-description">
+                Remove todos os dados em cache relacionados ao sistema Sam's Tech.
+                Recomendado após atualizações ou quando encontrar problemas de exibição.
+            </p>
+            <button id="clear-cache-btn" class="action-button">
+                Limpar Cache
+            </button>
+            <div id="clear-cache-result" class="result-message"></div>
+        </div>
+
+        <!-- Redefinir Configurações -->
+        <div class="action-card">
+            <h2 class="action-title">
+                <i class="fas fa-undo"></i>
+                Redefinir Configurações
+            </h2>
+            <p class="action-description">
+                Restaura todas as configurações para os valores padrão.
+                Use esta opção apenas se necessário, pois todas as preferências serão perdidas.
+            </p>
+            <button id="reset-settings-btn" class="action-button">
+                Redefinir Configurações
+            </button>
+            <div id="reset-settings-result" class="result-message"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div id="confirmation-modal" class="confirmation-modal">
+        <div class="confirmation-content">
+            <h3 class="confirmation-title">Confirmar Ação</h3>
+            <p class="confirmation-message">
+                Esta ação não pode ser desfeita. Tem certeza que deseja continuar?
+            </p>
+            <div class="confirmation-buttons">
+                <button id="confirm-action" class="confirm-button">Confirmar</button>
+                <button id="cancel-action" class="cancel-button">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="clear-data.js"></script>
+</body>
+</html>
